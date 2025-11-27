@@ -1,0 +1,261 @@
+{
+  "metadata": {
+    "projeto": "Simulador de Alertas de Desastres - Defesa Civil",
+    "data_geracao": "2025-11-27 11:04:17",
+    "versao": "1.0"
+  },
+  "base_dados": {
+    "geral": {
+      "total_registros": 21889,
+      "periodo": "2020-01-02 10:37:36 a 2025-03-05",
+      "municipios_unicos": 4254,
+      "total_colunas": 76,
+      "memoria_mb": 40.37
+    },
+    "distribuicao_regional": {
+      "Sul": 6304,
+      "Nordeste": 5537,
+      "Sudeste": 5028,
+      "Centro-oeste": 2664,
+      "Norte": 2356
+    },
+    "distribuicao_desastres": {
+      "Climatológico": 9528,
+      "Hidrológico": 9284,
+      "Meteorológico": 2146,
+      "Outros": 931
+    },
+    "features": {
+      "categoricas": [
+        "regiao",
+        "grupo_de_desastre",
+        "hierarquia_urbana",
+        "semiarido"
+      ],
+      "numericas": [
+        "pib_pc",
+        "populacao",
+        "proporcao_cobertura_total_atencao_basica"
+      ]
+    }
+  },
+  "targets": {
+    "DH_mortos_feridos": {
+      "distribuicao": {
+        "Com Dano": 1198,
+        "Nenhum Dano": 20691
+      },
+      "distribuicao_pct": {
+        "Com Dano": 5.47,
+        "Nenhum Dano": 94.53
+      },
+      "total_validos": 21889,
+      "n_classes": 2,
+      "imbalance_ratio": 17.27
+    },
+    "DH_total_danos_humanos_diretos": {
+      "distribuicao": {
+        "Alto": 6041,
+        "Baixo/Médio": 6042,
+        "Nenhum": 9806
+      },
+      "distribuicao_pct": {
+        "Alto": 27.6,
+        "Baixo/Médio": 27.6,
+        "Nenhum": 44.8
+      },
+      "total_validos": 21889,
+      "n_classes": 3,
+      "imbalance_ratio": 1.62
+    },
+    "DM_total_danos_materiais": {
+      "distribuicao": {
+        "Alto": 3541,
+        "Baixo/Médio": 3541,
+        "Nenhum": 14807
+      },
+      "distribuicao_pct": {
+        "Alto": 16.18,
+        "Baixo/Médio": 16.18,
+        "Nenhum": 67.65
+      },
+      "total_validos": 21889,
+      "n_classes": 3,
+      "imbalance_ratio": 4.18
+    },
+    "PEPL_total_publico": {
+      "distribuicao": {
+        "Alto": 5494,
+        "Baixo/Médio": 5494,
+        "Nenhum": 10901
+      },
+      "distribuicao_pct": {
+        "Alto": 25.1,
+        "Baixo/Médio": 25.1,
+        "Nenhum": 49.8
+      },
+      "total_validos": 21889,
+      "n_classes": 3,
+      "imbalance_ratio": 1.98
+    },
+    "PEPR_total_privado": {
+      "distribuicao": {
+        "Alto": 5123,
+        "Baixo/Médio": 5123,
+        "Nenhum": 11643
+      },
+      "distribuicao_pct": {
+        "Alto": 23.4,
+        "Baixo/Médio": 23.4,
+        "Nenhum": 53.19
+      },
+      "total_validos": 21889,
+      "n_classes": 3,
+      "imbalance_ratio": 2.27
+    }
+  },
+  "features_estatisticas": {
+    "pib_pc": {
+      "count": 21889,
+      "mean": 36860.58,
+      "median": 26762.31,
+      "std": 38835.99,
+      "min": 5737.04,
+      "max": 894806.28,
+      "q25": 14016.88,
+      "q75": 44971.71
+    },
+    "populacao": {
+      "count": 21889,
+      "mean": 66440.94,
+      "median": 15880.0,
+      "std": 293527.79,
+      "min": 909.0,
+      "max": 12396372.0,
+      "q25": 6952.0,
+      "q75": 37262.0
+    },
+    "proporcao_cobertura_total_atencao_basica": {
+      "count": 21889,
+      "mean": 89.42,
+      "median": 100.0,
+      "std": 20.06,
+      "min": 0.0,
+      "max": 100.0,
+      "q25": 84.8,
+      "q75": 100.0
+    },
+    "regiao": {
+      "Sul": 6304,
+      "Nordeste": 5537,
+      "Sudeste": 5028,
+      "Centro-oeste": 2664,
+      "Norte": 2356
+    },
+    "grupo_de_desastre": {
+      "Climatológico": 9528,
+      "Hidrológico": 9284,
+      "Meteorológico": 2146,
+      "Outros": 931
+    },
+    "hierarquia_urbana": {
+      "Centro Local": 14592,
+      "Centro Sub-Regional": 2597,
+      "Centro de Zona": 2064,
+      "Capital Regional": 1646,
+      "Metrópole": 990
+    },
+    "semiarido": {
+      "Não": 16141,
+      "Sim": 5748
+    }
+  },
+  "modelos": {
+    "total_modelos_treinados": 7,
+    "algoritmos_utilizados": [
+      "privado_RandomForest",
+      "privado_XGBoost",
+      "danos_materiais_RandomForest",
+      "danos_humanos_diretos_RandomForest",
+      "publico_RandomForest",
+      "feridos_XGBoost",
+      "feridos_RandomForest"
+    ],
+    "melhores_modelos": {
+      "PEPL_total": {
+        "modelo": "publico_RandomForest",
+        "f1_score": 0.6816,
+        "accuracy": 0.6791
+      },
+      "DH_mortos": {
+        "modelo": "feridos_RandomForest",
+        "f1_score": 0.8884,
+        "accuracy": 0.8901
+      },
+      "DM_total": {
+        "modelo": "danos_materiais_RandomForest",
+        "f1_score": 0.7382,
+        "accuracy": 0.7193
+      },
+      "PEPR_total": {
+        "modelo": "privado_RandomForest",
+        "f1_score": 0.6743,
+        "accuracy": 0.6704
+      },
+      "DH_total": {
+        "modelo": "danos_humanos_diretos_RandomForest",
+        "f1_score": 0.7111,
+        "accuracy": 0.7088
+      }
+    },
+    "comparacao_completa": [
+      {
+        "target": "DH_mortos",
+        "modelo": "feridos_RandomForest",
+        "test_f1": 0.888381355882899,
+        "test_accuracy": 0.8900523560209425
+      },
+      {
+        "target": "DH_mortos",
+        "modelo": "feridos_XGBoost",
+        "test_f1": 0.8625902136925012,
+        "test_accuracy": 0.8807893677003624
+      },
+      {
+        "target": "DH_total",
+        "modelo": "danos_humanos_diretos_RandomForest",
+        "test_f1": 0.7110522789824605,
+        "test_accuracy": 0.7087711283691183
+      },
+      {
+        "target": "DM_total",
+        "modelo": "danos_materiais_RandomForest",
+        "test_f1": 0.7382498105071599,
+        "test_accuracy": 0.7192782092279579
+      },
+      {
+        "target": "PEPL_total",
+        "modelo": "publico_RandomForest",
+        "test_f1": 0.6816232443557627,
+        "test_accuracy": 0.6790772042028324
+      },
+      {
+        "target": "PEPR_total",
+        "modelo": "privado_RandomForest",
+        "test_f1": 0.6743322144046843,
+        "test_accuracy": 0.6703974417542257
+      },
+      {
+        "target": "PEPR_total",
+        "modelo": "privado_XGBoost",
+        "test_f1": 0.6216307750450114,
+        "test_accuracy": 0.651277454056477
+      }
+    ]
+  },
+  "resumo_desempenho": {
+    "media_f1": 0.7397,
+    "media_accuracy": 0.7428,
+    "melhor_f1_geral": 0.8884
+  }
+}

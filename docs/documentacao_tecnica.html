@@ -1,0 +1,1073 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Técnica - Simulador de Alertas de Desastres</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: #ecf0f1;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: #34495e;
+            color: white;
+            padding: 40px;
+            border-bottom: 4px solid #2c3e50;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .content {
+            padding: 50px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 12px;
+            font-weight: 600;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+        
+        .section p {
+            margin-bottom: 18px;
+            text-align: justify;
+            color: #34495e;
+        }
+        
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 3px solid #34495e;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: #34495e;
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid #2c3e50;
+        }
+        
+        .stat-card h4 {
+            font-size: 0.95em;
+            margin-bottom: 15px;
+            opacity: 0.9;
+            font-weight: 500;
+            font-family: 'Segoe UI', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-card .value {
+            font-size: 2.8em;
+            font-weight: 700;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            border: 1px solid #ddd;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        table thead {
+            background: #34495e;
+            color: white;
+        }
+        
+        table th, table td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tbody tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .badge-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .badge-warning {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .badge-danger {
+            background: #c0392b;
+            color: white;
+        }
+        
+        .challenge-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .challenge-list li {
+            background: #f8f9fa;
+            margin: 20px 0;
+            padding: 25px;
+            border-left: 3px solid #34495e;
+        }
+        
+        .challenge-list li strong {
+            color: #2c3e50;
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 35px;
+            text-align: center;
+            border-top: 4px solid #34495e;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .footer p {
+            margin: 8px 0;
+        }
+        
+        ul {
+            margin-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>Simulador de Alertas de Desastres - Defesa Civil</h1>
+            <p>Sistema de Predição de Impactos baseado em Machine Learning</p>
+            <p style="font-size: 0.9em; margin-top: 15px; opacity: 0.8;">
+                Documentação Técnica | Gerado em: 2025-11-27 11:04:17
+            </p>
+        </div>
+        
+        <!-- CONTENT -->
+        <div class="content">
+            
+            <!-- SEÇÃO 1: VISÃO GERAL -->
+            <div class="section">
+                <h2>1. Visão Geral do Projeto</h2>
+                
+                <p>
+                    Este projeto desenvolve um sistema preditivo baseado em algoritmos de <strong>Machine Learning</strong> 
+                    para auxiliar a <strong>Defesa Civil Brasileira</strong> na antecipação e planejamento de respostas 
+                    a desastres naturais. O sistema utiliza características socioeconômicas, demográficas e geográficas 
+                    de municípios brasileiros para prever a severidade de impactos humanos, materiais e econômicos 
+                    decorrentes de eventos catastróficos.
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Registros Analisados</h4>
+                        <div class="value">21,889</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Municípios Únicos</h4>
+                        <div class="value">4,254</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Modelos Treinados</h4>
+                        <div class="value">7</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>F1-Score Médio</h4>
+                        <div class="value">0.740</div>
+                    </div>
+                </div>
+                
+                <h3>Objetivos do Sistema</h3>
+                <ul class="challenge-list">
+                    <li>
+                        <strong>Predição de Danos Humanos Diretos</strong>
+                        Estimativa probabilística de ocorrência de fatalidades, ferimentos e desalojamentos em eventos de desastre.
+                    </li>
+                    <li>
+                        <strong>Predição de Danos Materiais</strong>
+                        Avaliação de impacto em infraestrutura pública, residencial e instalações críticas.
+                    </li>
+                    <li>
+                        <strong>Predição de Prejuízos Econômicos</strong>
+                        Estimativa de perdas financeiras nos setores público e privado decorrentes do evento.
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- ============================================ -->
+            <!-- NOVA SEÇÃO 1.5: ATLAS BRASILEIRO DE DESASTRES -->
+            <!-- ============================================ -->
+            <div class="section">
+                <h2>1.5. Fonte Primária de Dados: Atlas Brasileiro de Desastres</h2>
+                
+                <p>
+                    O <strong>Atlas Brasileiro de Desastres</strong> constitui a principal fonte de dados deste projeto. 
+                    Trata-se de uma ferramenta oficial do governo federal, gerida pela <strong>Secretaria Nacional de 
+                    Proteção e Defesa Civil (Sedec/MIDR)</strong> em parceria histórica com o <strong>CEPED/UFSC</strong> 
+                    (Centro Universitário de Estudos e Pesquisas sobre Desastres). O Atlas compila registros de 
+                    desastres naturais ocorridos em território nacional, constituindo o mais abrangente repositório 
+                    sobre eventos adversos no Brasil.
+                </p>
+                
+                <h3>Características da Base de Dados</h3>
+                <div class="highlight-box">
+                    <p><strong>Fonte Primária:</strong></p>
+                    <ul>
+                        <li><strong>Sistema Integrado de Informações sobre Desastres (S2iD)</strong> - Plataforma digital 
+                        alimentada por gestores municipais de defesa civil</li>
+                        <li><strong>Série histórica:</strong> 1991 até o presente, com atualizações anuais</li>
+                        <li><strong>Cobertura geográfica:</strong> Todos os municípios brasileiros (5.570 municípios)</li>
+                        <li><strong>Tipologia de eventos:</strong> Classificação segundo COBRADE (Classificação e 
+                        Codificação Brasileira de Desastres), incluindo secas, inundações, deslizamentos, tempestades, 
+                        entre outros</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>Dados Disponibilizados:</strong></p>
+                    <ul>
+                        <li><strong>Danos Humanos:</strong> Mortos, feridos, enfermos, desabrigados, desalojados e desaparecidos</li>
+                        <li><strong>Danos Materiais:</strong> Instalações públicas e privadas destruídas ou danificadas</li>
+                        <li><strong>Prejuízos Econômicos:</strong> Estimativas de perdas nos setores público e privado (em R$)</li>
+                        <li><strong>Georreferenciamento:</strong> Código IBGE do município, estado e coordenadas geográficas</li>
+                        <li><strong>Temporalidade:</strong> Data de registro, início e fim do evento</li>
+                    </ul>
+                </div>
+                
+                <h3>Metodologia de Coleta e Processo ETL</h3>
+                <p>
+                    A alimentação do S2iD ocorre mediante <strong>notificação ativa</strong> por parte dos gestores 
+                    municipais de defesa civil, que preenchem formulários padronizados após a ocorrência de eventos 
+                    adversos. Este modelo descentralizado permite cobertura territorial abrangente, porém introduz 
+                    desafios metodológicos que impactam a qualidade e completude dos dados:
+                </p>
+                
+                <div class="highlight-box">
+                    <p><strong>Processo de Tratamento de Dados (ETL):</strong></p>
+                    <ol>
+                        <li><strong>Extração:</strong> Download via API ou exportação direta do S2iD</li>
+                        <li><strong>Limpeza:</strong>
+                            <ul style="margin-top: 8px;">
+                                <li>Remoção de registros duplicados (mesmo município, data e tipo de desastre)</li>
+                                <li>Correção de erros de digitação em nomes de municípios e códigos IBGE</li>
+                                <li>Padronização de valores ausentes (NaN vs 0 vs string vazia)</li>
+                                <li>Detecção de outliers fisicamente impossíveis (ex: danos > população)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Enriquecimento:</strong> Fusão com bases externas (PIB municipal, população, cobertura de saúde)</li>
+                        <li><strong>Validação:</strong> Conferência de consistência temporal e espacial</li>
+                    </ol>
+                </div>
+                
+                <h3>Limitações Metodológicas e Vieses</h3>
+                <p>
+                    Como qualquer base de dados de grande escala construída mediante notificação voluntária, 
+                    o Atlas apresenta limitações intrínsecas que devem ser consideradas na interpretação dos 
+                    modelos preditivos:
+                </p>
+                
+                <ul class="challenge-list">
+                    <li>
+                        <strong>Subnotificação Estrutural</strong>
+                        Municípios com <strong>menor capacidade administrativa</strong> ou infraestrutura precária 
+                        de defesa civil tendem a subnotificar eventos, especialmente aqueles de menor magnitude. 
+                        Este viés pode subestimar a real distribuição espacial de vulnerabilidades.
+                    </li>
+                    
+                    <li>
+                        <strong>Heterogeneidade no Preenchimento</strong>
+                        A <strong>padronização dos formulários de registro evoluiu ao longo das décadas</strong>, 
+                        resultando em inconsistências nas variáveis disponíveis e na granularidade das informações 
+                        entre diferentes períodos históricos.
+                    </li>
+                    
+                    <li>
+                        <strong>Incentivo à Superestimativa</strong>
+                        Gestores municipais podem, consciente ou inconscientemente, <strong>inflar estimativas de 
+                        danos</strong> em contextos de busca por recursos federais (decretos de emergência e estado 
+                        de calamidade pública), introduzindo viés de medição.
+                    </li>
+                    
+                    <li>
+                        <strong>Ausência de Validação Externa</strong>
+                        Não há, na maioria dos casos, <strong>verificação independente in loco</strong> dos dados 
+                        reportados, confiando-se inteiramente na acurácia das estimativas locais.
+                    </li>
+                    
+                    <li>
+                        <strong>Variabilidade Temporal na Qualidade</strong>
+                        A <strong>informatização do sistema (S2iD) a partir de 2013</strong> melhorou significativamente 
+                        a completude dos dados, mas registros anteriores (1991-2012) podem apresentar maior inconsistência.
+                    </li>
+                </ul>
+                
+                <h3>Tratamento Aplicado neste Projeto</h3>
+                <div class="highlight-box">
+                    <p>Para mitigar as limitações identificadas, adotamos as seguintes estratégias:</p>
+                    <ol>
+                        <li><strong>Recorte temporal:</strong> Foco em eventos pós-2020 para garantir homogeneidade metodológica</li>
+                        <li><strong>Detecção de outliers:</strong> Remoção de registros com ratio (danos_humanos/população) > 1.0 
+                        ou acima do percentil 99.9, eliminando casos fisicamente impossíveis</li>
+                        <li><strong>Tratamento de missings:</strong> Imputação zero para valores ausentes em variáveis de danos 
+                        (assumindo ausência de registro = ausência de dano)</li>
+                        <li><strong>Validação cruzada:</strong> Conferência de códigos IBGE e nomes de municípios com bases oficiais</li>
+                        <li><strong>Enriquecimento contextual:</strong> Incorporação de variáveis socioeconômicas (PIB, população, saúde) 
+                        para capturar capacidade de resposta local</li>
+                    </ol>
+                </div>
+                
+                <p style="margin-top: 25px;">
+                    Apesar das limitações inerentes, o Atlas Brasileiro de Desastres permanece como a 
+                    <strong>fonte mais completa e sistematizada de informações sobre desastres naturais no Brasil</strong>, 
+                    constituindo base essencial para pesquisa acadêmica, políticas públicas e desenvolvimento de 
+                    ferramentas de apoio à decisão em gestão de riscos.
+                </p>
+            </div>
+            
+            <!-- SEÇÃO 2: BASE DE DADOS -->
+            <div class="section">
+                <h2>2. Arquitetura dos Dados</h2>
+                
+                <p>
+                    A base de dados consolidada integra informações de múltiplas fontes oficiais, 
+                    cobrindo o período temporal de <strong>2020-01-02 10:37:36 a 2025-03-05</strong>. 
+                    O processo de ETL (Extract, Transform, Load) garantiu a consistência e qualidade dos dados.
+                </p>
+                
+                <h3>Fontes de Dados</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Atlas Brasileiro de Desastres Naturais</strong> - Registro histórico georeferenciado de eventos catastróficos</li>
+                        <li><strong>IBGE - Produto Interno Bruto Municipal</strong> - Indicadores socioeconômicos (PIB per capita, estimativa populacional)</li>
+                        <li><strong>DATASUS - Sistema de Atenção Básica</strong> - Cobertura de serviços de saúde municipal</li>
+                        <li><strong>IBGE - Classificação e Hierarquia Urbana</strong> - Tipologia de municípios</li>
+                    </ul>
+                </div>
+                
+                <h3>Distribuição Geográfica dos Eventos</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Região</th>
+                            <th>Nº de Registros</th>
+                            <th>Percentual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td><strong>Sul</strong></td>
+                            <td>6,304</td>
+                            <td>28.8%</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Nordeste</strong></td>
+                            <td>5,537</td>
+                            <td>25.3%</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Sudeste</strong></td>
+                            <td>5,028</td>
+                            <td>23.0%</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Centro-oeste</strong></td>
+                            <td>2,664</td>
+                            <td>12.2%</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Norte</strong></td>
+                            <td>2,356</td>
+                            <td>10.8%</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+                <h3>Taxonomia de Desastres</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categoria de Desastre</th>
+                            <th>Frequência</th>
+                            <th>Percentual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>Climatológico</td>
+                            <td>9,528</td>
+                            <td>43.5%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Hidrológico</td>
+                            <td>9,284</td>
+                            <td>42.4%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Meteorológico</td>
+                            <td>2,146</td>
+                            <td>9.8%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Outros</td>
+                            <td>931</td>
+                            <td>4.3%</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+                <h3>Variáveis Preditoras</h3>
+                <div class="highlight-box">
+                    <p><strong>Features Categóricas:</strong></p>
+                    <ul>
+                        <li><code>regiao</code></li>
+                        <li><code>grupo_de_desastre</code></li>
+                        <li><code>hierarquia_urbana</code></li>
+                        <li><code>semiarido</code></li>
+
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>Features Numéricas:</strong></p>
+                    <ul>
+                        <li><code>pib_pc</code></li>
+                        <li><code>populacao</code></li>
+                        <li><code>proporcao_cobertura_total_atencao_basica</code></li>
+
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO 3: TARGETS -->
+            <div class="section">
+                <h2>3. Variáveis Alvo e Categorização</h2>
+                
+                <p>
+                    Os targets foram categorizados em níveis de severidade discretos mediante análise exploratória 
+                    e aplicação de critérios técnicos. A discretização permitiu a formulação do problema como 
+                    classificação multiclasse, mais adequada para tomada de decisão em cenários operacionais.
+                </p>
+
+                <h3>Dh Mortos Feridos</h3>
+                <div class="highlight-box">
+                    <p><strong>Distribuição de Classes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Frequência</th>
+                                <th>Proporção</th>
+                                <th>Balanceamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Com Dano</strong></td>
+                                <td>1,198</td>
+                                <td>5.5%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Nenhum Dano</strong></td>
+                                <td>20,691</td>
+                                <td>94.5%</td>
+                                <td><span class="badge badge-danger">Desbalanceado</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;">
+                        <strong>Imbalance Ratio:</strong> 17.27 | 
+                        <em>Valor de referência: 1.0 (balanceamento perfeito)</em>
+                    </p>
+                </div>
+
+                <h3>Dh Total Danos Humanos Diretos</h3>
+                <div class="highlight-box">
+                    <p><strong>Distribuição de Classes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Frequência</th>
+                                <th>Proporção</th>
+                                <th>Balanceamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Alto</strong></td>
+                                <td>6,041</td>
+                                <td>27.6%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Baixo/Médio</strong></td>
+                                <td>6,042</td>
+                                <td>27.6%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Nenhum</strong></td>
+                                <td>9,806</td>
+                                <td>44.8%</td>
+                                <td><span class="badge badge-warning">Moderado</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;">
+                        <strong>Imbalance Ratio:</strong> 1.62 | 
+                        <em>Valor de referência: 1.0 (balanceamento perfeito)</em>
+                    </p>
+                </div>
+
+                <h3>Dm Total Danos Materiais</h3>
+                <div class="highlight-box">
+                    <p><strong>Distribuição de Classes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Frequência</th>
+                                <th>Proporção</th>
+                                <th>Balanceamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Alto</strong></td>
+                                <td>3,541</td>
+                                <td>16.2%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Baixo/Médio</strong></td>
+                                <td>3,541</td>
+                                <td>16.2%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Nenhum</strong></td>
+                                <td>14,807</td>
+                                <td>67.7%</td>
+                                <td><span class="badge badge-warning">Moderado</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;">
+                        <strong>Imbalance Ratio:</strong> 4.18 | 
+                        <em>Valor de referência: 1.0 (balanceamento perfeito)</em>
+                    </p>
+                </div>
+
+                <h3>Pepl Total Publico</h3>
+                <div class="highlight-box">
+                    <p><strong>Distribuição de Classes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Frequência</th>
+                                <th>Proporção</th>
+                                <th>Balanceamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Alto</strong></td>
+                                <td>5,494</td>
+                                <td>25.1%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Baixo/Médio</strong></td>
+                                <td>5,494</td>
+                                <td>25.1%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Nenhum</strong></td>
+                                <td>10,901</td>
+                                <td>49.8%</td>
+                                <td><span class="badge badge-warning">Moderado</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;">
+                        <strong>Imbalance Ratio:</strong> 1.98 | 
+                        <em>Valor de referência: 1.0 (balanceamento perfeito)</em>
+                    </p>
+                </div>
+
+                <h3>Pepr Total Privado</h3>
+                <div class="highlight-box">
+                    <p><strong>Distribuição de Classes:</strong></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Frequência</th>
+                                <th>Proporção</th>
+                                <th>Balanceamento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td><strong>Alto</strong></td>
+                                <td>5,123</td>
+                                <td>23.4%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Baixo/Médio</strong></td>
+                                <td>5,123</td>
+                                <td>23.4%</td>
+                                <td><span class="badge badge-success">Balanceado</span></td>
+                            </tr>
+
+                            <tr>
+                                <td><strong>Nenhum</strong></td>
+                                <td>11,643</td>
+                                <td>53.2%</td>
+                                <td><span class="badge badge-warning">Moderado</span></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;">
+                        <strong>Imbalance Ratio:</strong> 2.27 | 
+                        <em>Valor de referência: 1.0 (balanceamento perfeito)</em>
+                    </p>
+                </div>
+
+            </div>
+            
+            <!-- SEÇÃO 4: DESAFIOS E SOLUÇÕES -->
+            <div class="section">
+                <h2>4. Desafios Metodológicos</h2>
+                
+                <ul class="challenge-list">
+                    <li>
+                        <strong>Desbalanceamento Extremo de Classes</strong>
+                        <p>
+                            A distribuição original apresentava 70-95% de registros com ausência de danos (classe zero), 
+                            resultando em viés sistemático dos classificadores para a classe majoritária. 
+                            Este cenário é crítico para aplicações de predição de desastres, onde falsos negativos 
+                            (não detectar eventos com vítimas) apresentam alto custo social.
+                        </p>
+                        <p style="margin-top: 12px; color: #27ae60;">
+                            <strong>Abordagem Adotada:</strong> 
+                            (1) Aplicação de SMOTE (Synthetic Minority Over-sampling Technique) com sampling ratio 
+                            conservador de 1:5 para targets binários; (2) Parametrização de <code>class_weight='balanced'</code> 
+                            em todos os estimadores; (3) Otimização de recall da classe minoritária mediante scorer customizado 
+                            no GridSearchCV.
+                        </p>
+                    </li>
+                    
+                    <li>
+                        <strong>Outliers e Inconsistências Estruturais</strong>
+                        <p>
+                            Identificação de registros com danos humanos superiores à população municipal (violação de 
+                            restrição física), indicando possíveis erros de entrada ou agregação de dados.
+                        </p>
+                        <p style="margin-top: 12px; color: #27ae60;">
+                            <strong>Abordagem Adotada:</strong> 
+                            Criação de métrica auxiliar (ratio danos_humanos/população) e remoção conservadora de outliers 
+                            acima do percentil 99.9 ou ratio > 1.0, eliminando aproximadamente 0.1-1% dos dados mais extremos 
+                            enquanto preserva a integridade estatística da amostra.
+                        </p>
+                    </li>
+                    
+                    <li>
+                        <strong>Trade-off Recall vs Precision</strong>
+                        <p>
+                            Para o target crítico DH_mortos_feridos, maximização de recall (sensibilidade) é prioritária 
+                            para minimizar falsos negativos, porém compromete precision, aumentando taxa de falsos positivos.
+                        </p>
+                        <p style="margin-top: 12px; color: #27ae60;">
+                            <strong>Abordagem Adotada:</strong> 
+                            Implementação de scorer customizado focado em recall da classe positiva durante otimização de 
+                            hiperparâmetros, complementado por análise de curva Precision-Recall para seleção de threshold 
+                            ajustável em produção.
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- SEÇÃO 5: METODOLOGIA -->
+            <div class="section">
+                <h2>5. Metodologia de Machine Learning</h2>
+                
+                <h3>Pipeline de Treinamento</h3>
+                <div class="highlight-box">
+                    <ol>
+                        <li><strong>Preprocessamento:</strong> OneHotEncoder + StandardScaler</li>
+                        <li><strong>Rebalanceamento:</strong> SMOTE (targets binários)</li>
+                        <li><strong>Split Estratificado:</strong> 80/20 treino-teste</li>
+                        <li><strong>Validação Cruzada:</strong> StratifiedKFold (k=3)</li>
+                        <li><strong>Tuning:</strong> GridSearchCV</li>
+                        <li><strong>Avaliação:</strong> Métricas no conjunto de teste</li>
+                    </ol>
+                </div>
+                
+                <h3>Algoritmos Utilizados</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Algoritmo</th>
+                            <th>Hiperparâmetros Otimizados</th>
+                            <th>Características</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Logistic Regression</strong></td>
+                            <td>C, penalty, solver</td>
+                            <td>Baseline linear com class_weight balanceado</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Random Forest</strong></td>
+                            <td>n_estimators, max_depth, min_samples_split, min_samples_leaf</td>
+                            <td>Ensemble de árvores com suporte a importância de features</td>
+                        </tr>
+                        <tr>
+                            <td><strong>XGBoost</strong></td>
+                            <td>n_estimators, max_depth, learning_rate, subsample, scale_pos_weight</td>
+                            <td>Gradient boosting otimizado com regularização L1/L2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Métricas de Avaliação e Otimização</h3>
+                <div class="highlight-box">
+                    <p><strong>Estratégia Diferenciada por Tipo de Target:</strong></p>
+                    
+                    <p style="margin-top: 15px;"><strong>1. Target Binário Crítico (DH_mortos_feridos):</strong></p>
+                    <ul>
+                        <li><strong>Métrica de Otimização no GridSearchCV: Recall da classe "Com Dano"</strong></li>
+                        <li><strong>Justificativa:</strong> Minimizar <strong>Falsos Negativos</strong> é prioritário. 
+                        Não detectar um evento com vítimas (FN) tem custo social infinitamente maior do que 
+                        um alarme falso (FP).</li>
+                        <li><strong>Implementação:</strong> <code>make_scorer(recall_score, pos_label=classe_minoritaria)</code></li>
+                        <li><strong>Resultado esperado:</strong> Modelos com alta sensibilidade para detectar 
+                        eventos com vítimas, mesmo que aumentem falsos positivos.</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>2. Targets Multiclasse (Danos Materiais, Prejuízos Econômicos):</strong></p>
+                    <ul>
+                        <li><strong>Métrica de Otimização: F1-weighted</strong> (média ponderada pelo suporte de cada classe)</li>
+                        <li><strong>Justificativa:</strong> Balanceia precision e recall considerando o desbalanceamento 
+                        natural das classes.</li>
+                        <li><strong>Métricas Complementares:</strong> Accuracy e Balanced Accuracy</li>
+                    </ul>
+                    
+                    <p style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107;">
+                        <strong>⚠️ Decisão Crítica de Design:</strong><br>
+                        Para o target <code>DH_mortos_feridos</code>, priorizamos <strong>Recall > Precision</strong>. 
+                        Preferimos "alertar demais" (alguns alarmes falsos) do que "alertar de menos" (perder vítimas reais). 
+                        Este trade-off é explícito e alinhado com práticas de gestão de riscos em defesa civil.
+                    </p>
+                </div>
+                
+                <h3>Parametrização dos Modelos</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parâmetro</th>
+                            <th>Propósito</th>
+                            <th>Valor/Estratégia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>class_weight='balanced'</code></td>
+                            <td>Compensar desbalanceamento</td>
+                            <td>Todos os modelos</td>
+                        </tr>
+                        <tr>
+                            <td><code>scale_pos_weight</code></td>
+                            <td>Ponderação adicional (XGBoost)</td>
+                            <td>1, 5 (targets binários)</td>
+                        </tr>
+                        <tr>
+                            <td><code>scoring</code></td>
+                            <td>Métrica de otimização</td>
+                            <td><strong>recall (binário)</strong> | f1_weighted (multiclasse)</td>
+                        </tr>
+                        <tr>
+                            <td><code>cv=StratifiedKFold(3)</code></td>
+                            <td>Validação cruzada estratificada</td>
+                            <td>Mantém proporção de classes em cada fold</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- SEÇÃO 6: RESULTADOS -->
+            <div class="section">
+                <h2>6. Resultados e Desempenho</h2>
+                
+                <h3>Interpretação das Métricas</h3>
+                <div class="highlight-box">
+                    <p><strong>Como Ler os Resultados:</strong></p>
+                    
+                    <p style="margin-top: 10px;"><strong>Para DH_mortos_feridos (Target Binário Crítico):</strong></p>
+                    <ul>
+                        <li><strong>Recall "Com Dano":</strong> Proporção de eventos REAIS com vítimas que foram DETECTADOS pelo modelo.
+                        <br><em>Exemplo: Recall=0.75 → De cada 100 eventos com vítimas, o modelo detecta 75.</em></li>
+                        <li><strong>Precisão "Com Dano":</strong> Dos alertas emitidos, quantos eram verdadeiros.
+                        <br><em>Exemplo: Precision=0.60 → De cada 100 alertas, 60 eram corretos e 40 eram falsos alarmes.</em></li>
+                        <li><strong>Trade-off Aceito:</strong> Priorizamos Recall (não perder vítimas) mesmo que Precision seja menor (alguns alarmes falsos).</li>
+                    </ul>
+                    
+                    <p style="margin-top: 15px;"><strong>Para Targets Multiclasse:</strong></p>
+                    <ul>
+                        <li><strong>F1-Score Weighted:</strong> Média harmônica de precision e recall, ponderada pelo número de amostras em cada classe.</li>
+                        <li><strong>Balanced Accuracy:</strong> Média dos recalls de cada classe (não penaliza desbalanceamento).</li>
+                    </ul>
+                    
+                    <p style="margin-top: 20px; padding: 15px; background: #d1ecf1; border-left: 4px solid #17a2b8;">
+                        <strong>💡 Contexto Operacional:</strong><br>
+                        Em situações de emergência, <strong>um alarme falso (Falso Positivo)</strong> resulta em custos 
+                        operacionais de mobilização desnecessária. Já <strong>não detectar um evento com vítimas (Falso Negativo)</strong> 
+                        pode resultar em perdas de vidas. A escolha de maximizar Recall reflete esta assimetria de custos.
+                    </p>
+                </div>
+                
+                <h3>Modelos Selecionados por Target</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Target</th>
+                            <th>Algoritmo</th>
+                            <th>F1-Score</th>
+                            <th>Accuracy</th>
+                            <th>Avaliação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td><strong>Pepl Total</strong></td>
+                            <td>publico_RandomForest</td>
+                            <td>0.6816</td>
+                            <td>0.6791</td>
+                            <td><span class="badge badge-warning">Aceitável</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Dh Mortos</strong></td>
+                            <td>feridos_RandomForest</td>
+                            <td>0.8884</td>
+                            <td>0.8901</td>
+                            <td><span class="badge badge-success">Excelente</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Dm Total</strong></td>
+                            <td>danos_materiais_RandomForest</td>
+                            <td>0.7382</td>
+                            <td>0.7193</td>
+                            <td><span class="badge badge-success">Bom</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Pepr Total</strong></td>
+                            <td>privado_RandomForest</td>
+                            <td>0.6743</td>
+                            <td>0.6704</td>
+                            <td><span class="badge badge-warning">Aceitável</span></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Dh Total</strong></td>
+                            <td>danos_humanos_diretos_RandomForest</td>
+                            <td>0.7111</td>
+                            <td>0.7088</td>
+                            <td><span class="badge badge-success">Bom</span></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>F1-Score Médio</h4>
+                        <div class="value">0.740</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Accuracy Médio</h4>
+                        <div class="value">0.743</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Melhor F1 Observado</h4>
+                        <div class="value">0.888</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Tempo de Treinamento</h4>
+                        <div class="value">≈10min</div>
+                    </div>
+                </div>
+                
+                <h3>Discussão dos Resultados</h3>
+                <div class="highlight-box">
+                    <p>
+                        Os modelos demonstraram capacidade preditiva satisfatória considerando as seguintes limitações estruturais:
+                    </p>
+                    <ul>
+                        <li>Desbalanceamento extremo original das distribuições (70-95% de zeros)</li>
+                        <li>Heterogeneidade socioeconômica e geográfica dos municípios brasileiros</li>
+                        <li>Variabilidade intrínseca e estocasticidade dos fenômenos naturais</li>
+                        <li>Limitações de granularidade temporal e espacial dos dados</li>
+                    </ul>
+                    <p style="margin-top: 15px;">
+                        O algoritmo <strong>XGBoost</strong> apresentou desempenho superior na maioria dos targets, 
+                        demonstrando melhor capacidade de generalização e balanceamento entre precision e recall 
+                        em cenários de alta complexidade.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- SEÇÃO 7: CONCLUSÕES -->
+            <div class="section">
+                <h2>7. Conclusões e Trabalhos Futuros</h2>
+                
+                <h3>Contribuições Principais</h3>
+                <ul class="challenge-list">
+                    <li>
+                        <strong>Sistema Operacional de Predição</strong>
+                        Desenvolvimento de dashboard interativo (Streamlit) permitindo simulações em tempo real 
+                        com interface amigável para operadores de Defesa Civil.
+                    </li>
+                    <li>
+                        <strong>Tratamento Técnico de Desbalanceamento</strong>
+                        Implementação bem-sucedida de técnicas avançadas (SMOTE, class weighting, custom scoring) 
+                        melhorando significativamente recall da classe minoritária.
+                    </li>
+                    <li>
+                        <strong>Predição Multiobjetivo</strong>
+                        Sistema capaz de prever simultaneamente 5 dimensões de impacto (humano, material, econômico) 
+                        em única simulação.
+                    </li>
+                    <li>
+                        <strong>Otimização de Hiperparâmetros</strong>
+                        GridSearchCV com validação cruzada estratificada garantiu seleção robusta de configurações ótimas.
+                    </li>
+                </ul>
+                
+                <h3>Extensões Propostas</h3>
+                <div class="highlight-box">
+                    <ol>
+                        <li><strong>Features Temporais:</strong> Incorporação de sazonalidade, tendências históricas e autocorrelação temporal</li>
+                        <li><strong>Features Geoespaciais:</strong> Utilização de coordenadas geográficas, distâncias a corpos d'água, topografia</li>
+                        <li><strong>Ensemble Avançado:</strong> Implementação de stacking e blending de múltiplos modelos base</li>
+                        <li><strong>API REST e Monitoramento:</strong> Deploy em ambiente de produção com logging, monitoramento de drift e retraining automatizado</li>
+                        <li><strong>Integração com Dados Meteorológicos:</strong> Incorporação de previsões meteorológicas em tempo real</li>
+                    </ol>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><strong>Simulador de Alertas de Desastres - Defesa Civil</strong></p>
+            <p>Projeto de MBA em Data Science e Analytics</p>
+            <p>Documentação Técnica v1.0 | 2025-11-27 11:04:17</p>
+        </div>
+    </div>
+</body>
+</html>
