@@ -487,6 +487,108 @@ def main():
             })
             st.dataframe(df_algos, use_container_width=True)
             
+            # Seção 5.1: Features e Fontes de Dados
+            st.markdown("---")
+            st.markdown("### 5.1. Features (Variáveis Preditoras) e Fontes de Dados")
+            
+            st.markdown("""
+            O modelo utiliza um conjunto de **7 features** que capturam características socioeconômicas, 
+            geográficas e do tipo de desastre:
+            """)
+            
+            df_features = pd.DataFrame({
+                'Feature': [
+                    'grupo_de_desastre',
+                    'regiao',
+                    'populacao',
+                    'pib_pc',
+                    'hierarquia_urbana',
+                    'semiarido',
+                    'proporcao_cobertura_total_atencao_basica'
+                ],
+                'Tipo': [
+                    'Categórica',
+                    'Categórica',
+                    'Numérica',
+                    'Numérica',
+                    'Categórica',
+                    'Categórica',
+                    'Numérica'
+                ],
+                'Descrição': [
+                    'Tipo do desastre (Hidrológico, Geológico, Meteorológico, etc.)',
+                    'Região geográfica do município (Norte, Sul, Nordeste, etc.)',
+                    'População estimada do município (habitantes)',
+                    'PIB per capita do município (R$)',
+                    'Classificação REGIC/IBGE (Metrópole, Capital Regional, etc.)',
+                    'Município localizado no semiárido brasileiro (Sim/Não)',
+                    'Cobertura da Atenção Básica de Saúde (% da população)'
+                ],
+                'Fonte': [
+                    'Atlas Brasileiro de Desastres (S2iD)',
+                    'IBGE - Divisão Regional',
+                    'IBGE - Censo/Estimativas Populacionais',
+                    'IBGE - Contas Regionais',
+                    'IBGE - REGIC (Regiões de Influência das Cidades)',
+                    'SUDENE - Delimitação do Semiárido',
+                    'DATASUS/e-Gestor AB'
+                ]
+            })
+            
+            st.dataframe(df_features, use_container_width=True)
+            
+            with st.expander("📖 Justificativa das Features Selecionadas"):
+                st.markdown("""
+                **Rationale da Seleção de Features:**
+                
+                1. **grupo_de_desastre**: Diferentes tipos de desastres têm padrões de impacto distintos 
+                   (ex: secas causam mais danos econômicos, enxurradas mais mortes)
+                
+                2. **regiao**: Captura variações climáticas, infraestrutura e capacidade de resposta regional
+                
+                3. **populacao**: Proxy direto para exposição ao risco (mais pessoas = maior impacto potencial)
+                
+                4. **pib_pc**: Indica capacidade de prevenção, resposta e recuperação (municípios mais ricos 
+                   tendem a ter melhor infraestrutura)
+                
+                5. **hierarquia_urbana**: Municípios maiores têm mais recursos, mas também maior complexidade 
+                   e densidade populacional
+                
+                6. **semiarido**: Região com vulnerabilidades específicas (secas prolongadas, baixa resiliência hídrica)
+                
+                7. **proporcao_cobertura_total_atencao_basica**: Capacidade de atendimento emergencial e 
+                   recuperação pós-desastre
+                
+                **Features NÃO Incluídas (por limitações nos dados):**
+                - ❌ Sazonalidade/Mês do desastre (ausente no dataset)
+                - ❌ Intensidade do desastre (dados inconsistentes)
+                - ❌ Coordenadas geográficas (modelos não-espaciais)
+                - ❌ Histórico de desastres prévios (complexidade computacional)
+                """)
+            
+            st.markdown("---")
+            st.markdown("### 5.2. Pré-processamento")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**Variáveis Categóricas:**")
+                st.code("""
+OneHotEncoder(
+    drop='first',
+    handle_unknown='ignore'
+)
+                """, language="python")
+                st.caption("Evita multicolinearidade perfeita")
+            
+            with col2:
+                st.markdown("**Variáveis Numéricas:**")
+                st.code("""
+StandardScaler()
+# Z-score normalization
+                """, language="python")
+                st.caption("Padronização para média=0 e std=1")
+            
             # ========================================
             # NOVA SEÇÃO: ESTRATÉGIA DE OTIMIZAÇÃO
             # ========================================
