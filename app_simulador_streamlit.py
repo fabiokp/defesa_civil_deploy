@@ -280,18 +280,21 @@ def main():
         st.sidebar.write(f"**PIB per capita:** R$ {dados_municipio['pib_pc']:,.2f}")
         st.sidebar.write(f"**Região:** {dados_municipio['regiao']}")
         
-        desastres_historicos = df_base[df_base['Cod_IBGE_Mun'] == municipio_selecionado]['grupo_de_desastre'].unique()
-        desastres_historicos = sorted(desastres_historicos)
+        # Obter desastres que ocorreram no estado (UF) do município
+        uf_municipio = dados_municipio['uf']
+        desastres_uf = df_base[df_base['Sigla_UF'] == uf_municipio]['grupo_de_desastre'].unique()
+        desastres_uf = sorted(desastres_uf)
+        desastres_historicos_mun = df_base[df_base['Cod_IBGE_Mun'] == municipio_selecionado]['grupo_de_desastre'].unique()
         
         st.sidebar.markdown("---")
         tipo_desastre = st.sidebar.selectbox(
             "🌪️ Selecione o Tipo de Desastre",
-            options=desastres_historicos if len(desastres_historicos) > 0 else ["Hidrológico", "Geológico", "Meteorológico"],
+            options=desastres_uf,
             index=0
         )
         
-        if tipo_desastre not in desastres_historicos:
-            st.sidebar.warning("⚠️ Este desastre não consta no histórico deste município.")
+        if tipo_desastre not in desastres_historicos_mun:
+            st.sidebar.info(f"ℹ️ Este desastre não consta no histórico deste município, mas já ocorreu em {uf_municipio}.")
         
         st.sidebar.markdown("---")
         simular = st.sidebar.button("🚀 SIMULAR ALERTA", type="primary", use_container_width=True)
