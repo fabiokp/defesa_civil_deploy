@@ -357,7 +357,7 @@ def main():
             """)
     
     # ========================================
-    # ABA 2: METODOLGIA
+    # ABA 2: METODOLOGIA
     # ========================================
     with tab2:
         st.markdown("# 📋 Documentação Técnica do Projeto")
@@ -469,20 +469,89 @@ def main():
             st.markdown("### Pipeline de Treinamento")
             st.code("""
 1. Preprocessamento: OneHotEncoder + StandardScaler
-2. Rebalanceamento: SMOTE (targets binários)
+2. Rebalanceamento: SMOTE (targets binários, ratio 1:5)
 3. Split Estratificado: 80/20 treino-teste
 4. Validação Cruzada: StratifiedKFold (k=3)
 5. Tuning: GridSearchCV
 6. Avaliação: Métricas no conjunto de teste
             """, language="text")
             
-            st.markdown("### Algoritmos Utilizados")
+            st.markdown("### Algoritmos Testados")
             df_algos = pd.DataFrame({
                 'Algoritmo': ['Logistic Regression', 'Random Forest', 'XGBoost'],
                 'Hiperparâmetros': ['C, penalty, solver', 'n_estimators, max_depth, min_samples', 'n_estimators, max_depth, learning_rate'],
                 'Características': ['Baseline linear', 'Ensemble com feature importance', 'Gradient boosting otimizado']
             })
             st.dataframe(df_algos, use_container_width=True)
+            
+            # ========================================
+            # NOVA SEÇÃO: ESTRATÉGIA DE OTIMIZAÇÃO
+            # ========================================
+            st.markdown("### 🎯 Estratégia de Otimização por Target")
+            
+            with st.expander("📖 Entenda a Estratégia de Otimização", expanded=True):
+                st.markdown("""
+                **Diferenciação por Tipo de Target:**
+                
+                O projeto utiliza **estratégias de otimização diferenciadas** conforme a natureza de cada variável alvo:
+                """)
+                
+                # Target Binário Crítico
+                st.markdown("#### 1️⃣ Target Binário Crítico: `DH_mortos_feridos`")
+                st.info("""
+                **Classe Alvo de Otimização:** `Com Dano` (presença de mortes ou feridos)
+                
+                **Métrica de Otimização no GridSearchCV:**
+                - **Recall da classe "Com Dano"** (sensibilidade)
+                - Objetivo: **Maximizar a detecção de eventos com vítimas**
+                
+                **Justificativa Técnica:**
+                - **Custo Assimétrico:** Um Falso Negativo (não detectar vítimas reais) tem custo social infinitamente 
+                maior do que um Falso Positivo (alarme falso)
+                - **Prioridade Operacional:** Em defesa civil, preferimos "alertar demais" do que "alertar de menos"
+                - **Trade-off Aceito:** Menor Precision (mais alarmes falsos) em troca de maior Recall (detectar todas as vítimas)
+                
+                **Implementação Técnica:**
+                ```python
+                # Scorer customizado no GridSearchCV
+                from sklearn.metrics import make_scorer, recall_score
+                
+                scoring = make_scorer(
+                    recall_score, 
+                    pos_label=classe_minoritaria_idx,  # Índice de "Com Dano"
+                    zero_division=0
+                )
+                ```
+                
+                **Técnicas de Rebalanceamento Aplicadas:**
+                - ✅ SMOTE (Synthetic Minority Over-sampling) com ratio 1:5
+                - ✅ class_weight='balanced' em todos os modelos
+                - ✅ scale_pos_weight nos modelos XGBoost
+                """)
+                
+                # Targets Multiclasse
+                st.markdown("#### 2️⃣ Targets Multiclasse (3 categorias)")
+                st.markdown("""
+                **Variáveis:** `DH_total`, `DM_total`, `PEPL_total`, `PEPR_total`
+                
+                **Categorias:** Nenhum | Baixo/Médio | Alto
+                """)
+                
+                st.success("""
+                **Métrica de Otimização no GridSearchCV:**
+                - **F1-weighted** (média harmônica de Precision e Recall, ponderada pelo suporte de cada classe)
+                
+                **Justificativa Técnica:**
+                - Balanceia **Precision** e **Recall** sem favorecer classes majoritárias
+                - Considera o desbalanceamento natural via ponderação pelo número de amostras
+                - Métrica mais adequada para classificação multiclasse desbalanceada
+                
+                **Implementação Técnica:**
+                ```python
+                # Scorer padrão do GridSearchCV
+                scoring = 'f1_weighted'
+                ```
+                """)
             
             # Seção 6: Resultados
             st.markdown("---")
