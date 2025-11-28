@@ -43,26 +43,34 @@ Essas predições podem auxiliar:
 
 #### 2. **DH_total_danos_humanos_diretos** (Danos Humanos Totais)
 - **Definição**: Soma de mortos + feridos + enfermos + desaparecidos + desabrigados + desalojados
-- **Tipo**: Classificação **Multiclasse** (5 categorias via quartis)
-  - `Zero`: Nenhum dano
-  - `Q1 (Baixo)`: 25º percentil
-  - `Q2 (Médio-Baixo)`: 50º percentil
-  - `Q3 (Médio-Alto)`: 75º percentil
-  - `Q4 (Alto)`: Acima do 75º percentil
+- **Tipo**: Classificação **Multiclasse** (3 categorias)
+  - `Nenhum`: Zero danos humanos (~70-75% dos casos)
+  - `Baixo/Médio`: Valores entre 1 e percentil 75
+  - `Alto`: Acima do percentil 75 (quartil superior)
+- **Distribuição**: ~72% zeros, valores extremos até 10.000+ pessoas afetadas
 
 #### 3. **DM_total_danos_materiais** (Danos Materiais)
 - **Definição**: Soma de instalações públicas + privadas + unidades habitacionais danificadas/destruídas
-- **Tipo**: Classificação **Multiclasse** (5 categorias via quartis)
-- **Distribuição**: ~75% zeros, valores extremos até 30.000+ construções afetadas
+- **Tipo**: Classificação **Multiclasse** (3 categorias)
+  - `Nenhum`: Zero danos materiais (~75% dos casos)
+  - `Baixo/Médio`: 1 a percentil 75
+  - `Alto`: Acima do percentil 75
+- **Distribuição**: ~76% zeros, valores extremos até 30.000+ construções afetadas
 
 #### 4. **PEPL_total_publico** (Prejuízos Econômicos Públicos)
 - **Definição**: Valor em reais dos prejuízos ao setor público
-- **Tipo**: Classificação **Multiclasse** (5 categorias via quartis)
+- **Tipo**: Classificação **Multiclasse** (3 categorias)
+  - `Nenhum`: R$ 0 (~70% dos casos)
+  - `Baixo/Médio`: Até percentil 75
+  - `Alto`: Acima do percentil 75
 - **Distribuição**: ~70% zeros, valores extremos acima de R$ 1 bilhão
 
 #### 5. **PEPR_total_privado** (Prejuízos Econômicos Privados)
 - **Definição**: Valor em reais dos prejuízos ao setor privado
-- **Tipo**: Classificação **Multiclasse** (5 categorias via quartis)
+- **Tipo**: Classificação **Multiclasse** (3 categorias)
+  - `Nenhum`: R$ 0 (~85% dos casos)
+  - `Baixo/Médio`: Até percentil 75
+  - `Alto`: Acima do percentil 75
 - **Distribuição**: ~85% zeros, valores extremos acima de R$ 500 milhões
 
 ---
@@ -87,10 +95,13 @@ Distribuição típica (ex: DH_mortos_feridos):
 - MAE/RMSE são dominados pelos outliers
 
 **Solução adotada**: Categorização estratégica
-- **Binária** para `DH_mortos_feridos`: Foco em **detectar presença de vítimas**
-- **Quartis** para demais: Equilibra **granularidade** com **classes mínimas viáveis**
-- Remove casos com <30 amostras por classe
-- Permite uso de **métricas apropriadas** (F1-score, Balanced Accuracy, Recall)
+- **Binária** para `DH_mortos_feridos`: Foco em **detectar presença de vítimas** (Nenhum Dano vs Com Dano)
+- **3 categorias** para demais targets: Equilibra **simplicidade** com **informação útil**
+  - `Nenhum`: Zero (classe majoritária preservada)
+  - `Baixo/Médio`: Valores não-zero até P75 (agrupa casos leves a moderados)
+  - `Alto`: Acima de P75 (quartil superior - eventos mais severos)
+- Evita granularidade excessiva (5 classes seria muito fragmentado)
+- Permite uso de **métricas apropriadas** (F1-score weighted, Balanced Accuracy, Recall)
 
 ---
 
@@ -209,16 +220,14 @@ PEPR_total_privado                     84.7%         15.3%           5.5:1
 
 ⭐ **Métrica crítica**: Recall da classe "Com Dano" mede capacidade de identificar casos com vítimas.
 
-#### Targets Multiclasse (Quartis)
+#### Targets Multiclasse (3 Categorias)
 
-| Target | Melhor Modelo | Test F1 | Test Balanced Acc | N Classes |
-|--------|--------------|---------|-------------------|-----------|
-| DH_total_danos_humanos | [TBD] | [TBD] | [TBD] | 5 |
-| DM_total_danos_materiais | [TBD] | [TBD] | [TBD] | 5 |
-| PEPL_total_publico | [TBD] | [TBD] | [TBD] | 5 |
-| PEPR_total_privado | [TBD] | [TBD] | [TBD] | 4* |
-
-\* Classe Q4 removida por ter <30 amostras
+| Target | Melhor Modelo | Test F1 | Test Balanced Acc | Categorias |
+|--------|--------------|---------|-------------------|------------|
+| DH_total_danos_humanos | Random Forest | [TBD] | [TBD] | Nenhum / Baixo-Médio / Alto |
+| DM_total_danos_materiais | Random Forest | [TBD] | [TBD] | Nenhum / Baixo-Médio / Alto |
+| PEPL_total_publico | Random Forest | [TBD] | [TBD] | Nenhum / Baixo-Médio / Alto |
+| PEPR_total_privado | Random Forest/XGBoost | [TBD] | [TBD] | Nenhum / Baixo-Médio / Alto |
 
 ---
 
@@ -251,11 +260,13 @@ PEPR_total_privado                     84.7%         15.3%           5.5:1
    - Features geográficas e do evento explicam >50% da variância
    - Variáveis socioeconômicas têm papel secundário mas significativo
 
-3. **Trade-off entre granularidade e viabilidade**
-   - Quartis equilibram classes mínimas com informação útil
-   - Classes extremamente pequenas foram excluídas (melhor generalização)
+3. **Trade-off entre granularidade e simplicidade**
+   - 3 categorias (Nenhum / Baixo-Médio / Alto) equilibram interpretabilidade e viabilidade estatística
+   - Evita fragmentação excessiva (5+ classes seria impraticável com desbalanceamento)
+   - Foco em classes acionáveis: "Sem dano", "Precaução moderada", "Alerta máximo"
 
 4. **SMOTE moderado (1:5) supera rebalanceamento completo**
+   - Aplicado apenas ao target binário crítico (DH_mortos_feridos)
    - Evita overfitting em amostras sintéticas
    - Mantém realismo da distribuição
 
@@ -327,35 +338,54 @@ PEPR_total_privado                     84.7%         15.3%           5.5:1
 ## 📁 Estrutura do Projeto
 
 ```
-defesa/
-├── 📓 01_monta_base.ipynb          # ETL: Download e consolidação de dados
-│   ├── Google Drive → Atlas de Desastres (2020-2025)
-│   ├── API IBGE → PIB Municipal (2021)
-│   └── Indicadores de Saúde (2020)
+defesa_civil_deploy/
+├── 📄 app_simulador_streamlit.py        # 🚀 Dashboard interativo Streamlit
+│   ├── Simulador de alertas de desastres
+│   ├── Seleção de município e tipo de desastre
+│   ├── Predições em tempo real (5 modelos)
+│   ├── Visualização de KPIs de severidade
+│   └── Documentação técnica integrada
 │
-├── 📓 02_categoriza_targets.ipynb  # Análise de desbalanceamento
-│   ├── Estatísticas detalhadas (zeros, percentis, skewness)
-│   ├── Visualizações (histogramas, log-transformações)
-│   ├── Teste de 4 estratégias de categorização
-│   └── Seleção: Binária (DH_mortos_feridos) + Quartis (demais)
+├── 📁 data/                              # Dados processados
+│   └── 📄 df_defesa_civil_categorizado.csv  # Dataset com targets em 3 categorias
+│       ├── 11.500+ registros (2020-2025)
+│       ├── Features: regiao, desastre, PIB, população, etc.
+│       └── Targets: DH_mortos (binário) + 4 multiclasse (3 categorias)
 │
-├── 📓 03_ml_classificacao.ipynb    # Pipeline completo de ML
-│   ├── Preparação: SMOTE (1:5), class weights, remoção de classes pequenas
-│   ├── Modelos: Logistic Regression, Random Forest, XGBoost
-│   ├── Tuning: GridSearchCV com StratifiedKFold (3 folds)
-│   ├── Avaliação: Recall, F1, Balanced Acc, Confusion Matrix
-│   └── Análise de importância de features
+├── 📁 models/                            # Modelos treinados (270MB)
+│   ├── 📦 DH_mortos_feridos_RandomForest_best.pkl       # 65 MB
+│   ├── 📦 DH_mortos_feridos_XGBoost_best.pkl            # 0.4 MB
+│   ├── 📦 DH_total_danos_humanos_diretos_RandomForest_best.pkl  # 63.7 MB
+│   ├── 📦 DM_total_danos_materiais_RandomForest_best.pkl        # 24.9 MB
+│   ├── 📦 PEPL_total_publico_RandomForest_best.pkl              # 75.1 MB
+│   ├── 📦 PEPR_total_privado_RandomForest_best.pkl              # 39.7 MB
+│   ├── 📦 PEPR_total_privado_XGBoost_best.pkl           # 2.3 MB
+│   └── 📄 model_comparison.csv              # Comparação de performance
 │
-├── 📄 df_defesa_civil_final.csv            # Dataset consolidado (11.5k registros)
-├── 📄 df_defesa_civil_categorizado.csv     # Dataset com targets categorizados
+├── 📁 docs/                              # Documentação técnica
+│   ├── 📄 dados_relatorio_tecnico.json      # Métricas e metadados dos modelos
+│   └── 📄 documentacao_tecnica.html         # Relatório técnico completo
 │
-├── 📁 models_classificacao/                 # Modelos treinados persistidos
-│   ├── 📄 model_comparison.csv              # Tabela comparativa de performance
-│   ├── 📦 DH_mortos_feridos_XGBoost_best.pkl
-│   ├── 📦 DH_total_danos_humanos_RandomForest_best.pkl
-│   └── ... (5 modelos salvos em .pkl)
+├── 📄 requirements.txt                   # Dependências Python
+│   ├── streamlit, pandas, numpy
+│   ├── scikit-learn, xgboost
+│   └── matplotlib, seaborn, joblib
 │
-└── 📄 README.md                             # Este arquivo
+└── 📄 README.md                          # Este arquivo
+```
+
+### 🌐 Deploy em Produção
+
+Este repositório está configurado para deploy no **Streamlit Community Cloud**:
+
+```bash
+# Executar localmente
+streamlit run app_simulador_streamlit.py
+
+# Deploy automático via GitHub
+# 1. Push para repositório GitHub
+# 2. Conectar em share.streamlit.io
+# 3. App disponível em: https://[seu-app].streamlit.app
 ```
 
 ---
@@ -370,64 +400,77 @@ defesa/
 
 | Biblioteca | Versão | Uso |
 |-----------|--------|-----|
-| `pandas` | 2.0+ | Manipulação de dados |
-| `numpy` | 1.24+ | Operações numéricas |
-| `scikit-learn` | 1.3+ | ML pipeline, modelos, métricas |
+| `streamlit` | 1.31+ | Dashboard web interativo |
+| `pandas` | 2.1+ | Manipulação de dados |
+| `numpy` | 1.26+ | Operações numéricas |
+| `scikit-learn` | 1.4+ | ML pipeline, modelos, métricas |
 | `xgboost` | 2.0+ | Gradient boosting |
-| `imbalanced-learn` | 0.11+ | SMOTE |
-| `matplotlib` | 3.7+ | Visualizações estáticas |
-| `seaborn` | 0.12+ | Visualizações estatísticas |
-| `gdown` | 4.7+ | Download do Google Drive |
+| `matplotlib` | 3.8+ | Visualizações estáticas |
+| `seaborn` | 0.13+ | Visualizações estatísticas |
+| `joblib` | 1.3+ | Serialização de modelos |
 
 ### Instalação
 
 ```bash
-# Criar ambiente virtual
-python -m venv venv_defesa
-source venv_defesa/bin/activate  # Linux/Mac
+# Clonar repositório
+git clone https://github.com/fabiokp/defesa_civil_deploy.git
+cd defesa_civil_deploy
+
+# Criar ambiente virtual (opcional)
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
 # ou
-venv_defesa\Scripts\activate  # Windows
+venv\Scripts\activate  # Windows
 
 # Instalar dependências
-pip install pandas numpy scikit-learn xgboost imbalanced-learn matplotlib seaborn gdown jupyter
+pip install -r requirements.txt
 ```
 
 ---
 
-## 📝 Reprodutibilidade
+## 🚀 Como Usar
 
-### Seeds e Configurações
-- **Random State**: 42 (fixo em todos os experimentos)
-- **Test Size**: 20% (stratified)
-- **CV Folds**: 3 (stratified)
-- **SMOTE k_neighbors**: min(5, minority_class - 1)
-- **Grid Search**: n_jobs=-1 (paralelo)
+### Executar Dashboard Localmente
 
-### Execução Sequencial
 ```bash
-# 1. Montar base de dados
-jupyter notebook 01_monta_base.ipynb
-
-# 2. Categorizar targets
-jupyter notebook 02_categoriza_targets.ipynb
-
-# 3. Treinar modelos
-jupyter notebook 03_ml_classificacao.ipynb
+streamlit run app_simulador_streamlit.py
 ```
 
-⏱️ **Tempo estimado**: ~45 minutos (depende do hardware)
+O app abrirá automaticamente em `http://localhost:8501`
+
+### Utilização do Simulador
+
+1. **Selecionar Município**: Escolha na barra lateral (5.570 municípios disponíveis)
+2. **Escolher Tipo de Desastre**: Apenas desastres que já ocorreram no estado (UF)
+3. **Clicar em "SIMULAR ALERTA"**: Executa predições com os 5 modelos
+4. **Analisar Resultados**:
+   - Dashboard visual com nível de severidade por tipo de dano
+   - Confiança das predições (probabilidade)
+   - Nível de alerta geral (🟢 Baixo / 🟠 Elevado / 🔴 Crítico)
+
+### Abas Disponíveis
+
+- **🚨 Simulador de Alertas**: Interface principal de predição
+- **📋 Metodologia**: Documentação técnica completa
+  - Fontes de dados e features
+  - Pipeline de treinamento
+  - Estratégias de otimização
+  - Métricas de desempenho
+
+⏱️ **Tempo de resposta**: <2 segundos por predição
 
 ---
 
 ## 👥 Informações do Projeto
 
-**Autor**: [Seu Nome]  
-**Instituição**: MBA - Universidade [Nome]  
-**Disciplina**: Laboratório de Defesa Civil  
-**Data**: Janeiro 2025  
-**Orientador**: [Nome do Professor]
+**Repositório**: defesa_civil_deploy  
+**Owner**: fabiokp  
+**Tipo**: Dashboard de Machine Learning para Defesa Civil  
+**Data**: Novembro 2025  
+**Tecnologias**: Python, Streamlit, Scikit-learn, XGBoost
 
-**Contato**: [email@exemplo.com]
+**Deploy**: Streamlit Community Cloud  
+**Status**: ✅ Em produção
 
 ---
 
@@ -447,4 +490,4 @@ Este projeto é de uso acadêmico. Dados públicos do governo brasileiro.
 
 ---
 
-**Última atualização**: [Data atual]
+**Última atualização**: 28 de Novembro de 2025
